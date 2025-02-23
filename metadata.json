@@ -1,0 +1,14 @@
+{
+  "name": "Open .desktop file location",
+  "description": "Opens the location of the applications .desktop file",
+  "uuid": "open-desktop-location@laura.media",
+  "url": "https://github.com/laurawebdev/open-desktop-location",
+  "version": 1,
+  "version-name": "1.0.0",
+  "shell-version": [
+    "45",
+    "46",
+    "47",
+    "48"
+  ]
+}
