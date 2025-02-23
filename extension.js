@@ -8,6 +8,8 @@ export default class OpenDesktopLocationExtension extends Extension {
     constructor(metadata) {
         super(metadata);
         this._originalPopupMenu = null;
+        this._customMenuItemFolder = null;
+        this._customMenuItemFile = null;
     }
 
     enable() {
@@ -17,39 +19,33 @@ export default class OpenDesktopLocationExtension extends Extension {
         }
         const originalPopupMenu = this._originalPopupMenu;
 
-        // Replace the popupMenu method with our custom version
+        // Since there is not proper API to add context menu functions to the AppIcons, we'll have to patch the popupMenu function instead
         AppDisplay.AppIcon.prototype.popupMenu = function (side = imports.gi.St.Side.LEFT) {
-            // Call the original popupMenu method
             originalPopupMenu.call(this, side);
 
-            // Ensure the menu exists
             if (!this._menu) {
-                log('No context menu found for the app icon.');
+                console.log('No context menu found for the app icon.');
                 return false;
             }
 
-            // Add a new custom item to the context menu
+            const desktopInfo = this.app.get_app_info();
+            const desktopFilePath = desktopInfo?.get_filename();
+            if (!desktopFilePath) {
+                console.log('No .desktop file found for the selected app.');
+                return;
+            }
+
+            // Open folder action
             if (!this._customMenuItemFolder) {
                 this._customMenuItemFolder = new PopupMenu.PopupMenuItem('Open .desktop location');
                 this._customMenuItemFolder.connect('activate', () => {
-                    const desktopInfo = this.app.get_app_info();
-                    const desktopFilePath = desktopInfo?.get_filename();
-
-                    if (!desktopFilePath) {
-                        log('No .desktop file found for the selected app.');
-                        return;
-                    }
-
-                    // Close the overview window
                     if (Main.overview.visible) {
-                        log('Hiding overview...');
                         Main.overview.hide();
                     }
 
-                    // Open the folder containing the .desktop file
                     const folder = Gio.File.new_for_path(desktopFilePath).get_parent();
                     if (folder) {
-                        log(`Opening folder: ${folder.get_uri()}`);
+                        console.log(`Opening folder: ${folder.get_uri()}`);
                         Gio.AppInfo.launch_default_for_uri(folder.get_uri(), null);
                     }
                 });
@@ -57,27 +53,17 @@ export default class OpenDesktopLocationExtension extends Extension {
                 this._menu.addMenuItem(this._customMenuItemFolder);
             }
 
-            if(this._customMenuItemFile) {
+            // Open file action
+            if(!this._customMenuItemFile) {
                 this._customMenuItemFile = new PopupMenu.PopupMenuItem('Open .desktop file');
                 this._customMenuItemFile.connect('activate', () => {
-                    const desktopInfo = this.app.get_app_info();
-                    const desktopFilePath = desktopInfo?.get_filename();
-
-                    if (!desktopFilePath) {
-                        log('No .desktop file found for the selected app.');
-                        return;
-                    }
-
-                    // Close the overview window
                     if (Main.overview.visible) {
-                        log('Hiding overview...');
                         Main.overview.hide();
                     }
 
-                    // Open the folder containing the .desktop file
                     const file = Gio.File.new_for_path(desktopFilePath);
                     if (file) {
-                        log(`Opening file: ${file.get_uri()}`);
+                        console.log(`Opening file: ${file.get_uri()}`);
                         Gio.AppInfo.launch_default_for_uri(file.get_uri(), null);
                     }
                 });
