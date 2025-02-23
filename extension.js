@@ -28,62 +28,62 @@ export default class OpenDesktopLocationExtension extends Extension {
                 return false;
             }
 
-            // If the custom menu item is already added, skip
-            if (this._customMenuItemFolder) return false;
-            if (this._customMenuItemFile) return false;
-
             // Add a new custom item to the context menu
-            this._customMenuItemFolder = new PopupMenu.PopupMenuItem('Open .desktop location');
-            this._customMenuItemFolder.connect('activate', () => {
-                const desktopInfo = this.app.get_app_info();
-                const desktopFilePath = desktopInfo?.get_filename();
+            if (!this._customMenuItemFolder) {
+                this._customMenuItemFolder = new PopupMenu.PopupMenuItem('Open .desktop location');
+                this._customMenuItemFolder.connect('activate', () => {
+                    const desktopInfo = this.app.get_app_info();
+                    const desktopFilePath = desktopInfo?.get_filename();
 
-                if (!desktopFilePath) {
-                    log('No .desktop file found for the selected app.');
-                    return;
-                }
+                    if (!desktopFilePath) {
+                        log('No .desktop file found for the selected app.');
+                        return;
+                    }
 
-                // Close the overview window
-                if (Main.overview.visible) {
-                    log('Hiding overview...');
-                    Main.overview.hide();
-                }
+                    // Close the overview window
+                    if (Main.overview.visible) {
+                        log('Hiding overview...');
+                        Main.overview.hide();
+                    }
 
-                // Open the folder containing the .desktop file
-                const folder = Gio.File.new_for_path(desktopFilePath).get_parent();
-                if (folder) {
-                    log(`Opening folder: ${folder.get_uri()}`);
-                    Gio.AppInfo.launch_default_for_uri(folder.get_uri(), null);
-                }
-            });
+                    // Open the folder containing the .desktop file
+                    const folder = Gio.File.new_for_path(desktopFilePath).get_parent();
+                    if (folder) {
+                        log(`Opening folder: ${folder.get_uri()}`);
+                        Gio.AppInfo.launch_default_for_uri(folder.get_uri(), null);
+                    }
+                });
 
-            this._customMenuItemFile = new PopupMenu.PopupMenuItem('Open .desktop file');
-            this._customMenuItemFile.connect('activate', () => {
-                const desktopInfo = this.app.get_app_info();
-                const desktopFilePath = desktopInfo?.get_filename();
+                this._menu.addMenuItem(this._customMenuItemFolder);
+            }
 
-                if (!desktopFilePath) {
-                    log('No .desktop file found for the selected app.');
-                    return;
-                }
+            if(this._customMenuItemFile) {
+                this._customMenuItemFile = new PopupMenu.PopupMenuItem('Open .desktop file');
+                this._customMenuItemFile.connect('activate', () => {
+                    const desktopInfo = this.app.get_app_info();
+                    const desktopFilePath = desktopInfo?.get_filename();
 
-                // Close the overview window
-                if (Main.overview.visible) {
-                    log('Hiding overview...');
-                    Main.overview.hide();
-                }
+                    if (!desktopFilePath) {
+                        log('No .desktop file found for the selected app.');
+                        return;
+                    }
 
-                // Open the folder containing the .desktop file
-                const file = Gio.File.new_for_path(desktopFilePath);
-                if (file) {
-                    log(`Opening file: ${file.get_uri()}`);
-                    Gio.AppInfo.launch_default_for_uri(file.get_uri(), null);
-                }
-            });
+                    // Close the overview window
+                    if (Main.overview.visible) {
+                        log('Hiding overview...');
+                        Main.overview.hide();
+                    }
 
-            // Add the custom menu item correctly
-            this._menu.addMenuItem(this._customMenuItemFolder);
-            this._menu.addMenuItem(this._customMenuItemFile);
+                    // Open the folder containing the .desktop file
+                    const file = Gio.File.new_for_path(desktopFilePath);
+                    if (file) {
+                        log(`Opening file: ${file.get_uri()}`);
+                        Gio.AppInfo.launch_default_for_uri(file.get_uri(), null);
+                    }
+                });
+
+                this._menu.addMenuItem(this._customMenuItemFile);
+            }
         };
     }
 
