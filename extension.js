@@ -29,7 +29,8 @@ export default class OpenDesktopLocationExtension extends Extension {
             }
 
             // If the custom menu item is already added, skip
-            if (this._customMenuItem) return false;
+            if (this._customMenuItemFolder) return false;
+            if (this._customMenuItemFile) return false;
 
             // Add a new custom item to the context menu
             this._customMenuItemFolder = new PopupMenu.PopupMenuItem('Open .desktop location');

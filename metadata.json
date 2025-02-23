@@ -1,8 +1,8 @@
 {
-  "name": "Open .desktop file location",
-  "description": "Opens the location of the applications .desktop file",
-  "uuid": "open-desktop-location@laura.media",
-  "url": "https://github.com/laurawebdev/open-desktop-location",
+  "name": "Open Proton drive location",
+  "description": "Opens the location of the drive of a Proton game/application",
+  "uuid": "open-proton-location@laura.media",
+  "url": "https://github.com/laurawebdev/open-proton-location",
   "version": 1,
   "version-name": "1.0.0",
   "shell-version": [
