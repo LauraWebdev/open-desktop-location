@@ -1,4 +1,4 @@
-import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
+import { Extension, gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import * as AppDisplay from 'resource:///org/gnome/shell/ui/appDisplay.js';
@@ -37,7 +37,7 @@ export default class OpenDesktopLocationExtension extends Extension {
 
             // Open folder action
             if (!this._customMenuItemFolder) {
-                this._customMenuItemFolder = new PopupMenu.PopupMenuItem('Open .desktop location');
+                this._customMenuItemFolder = new PopupMenu.PopupMenuItem(_('Open .desktop location'));
                 this._customMenuItemFolder.connect('activate', () => {
                     if (Main.overview.visible) {
                         Main.overview.hide();
@@ -55,7 +55,7 @@ export default class OpenDesktopLocationExtension extends Extension {
 
             // Open file action
             if(!this._customMenuItemFile) {
-                this._customMenuItemFile = new PopupMenu.PopupMenuItem('Open .desktop file');
+                this._customMenuItemFile = new PopupMenu.PopupMenuItem(_('Open .desktop file'));
                 this._customMenuItemFile.connect('activate', () => {
                     if (Main.overview.visible) {
                         Main.overview.hide();

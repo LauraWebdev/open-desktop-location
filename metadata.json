@@ -5,6 +5,7 @@
   "url": "https://github.com/laurawebdev/open-desktop-location",
   "version": 2,
   "version-name": "1.0.1",
+  "gettext-domain": "messages",
   "shell-version": [
     "45",
     "46",
