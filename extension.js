@@ -43,10 +43,11 @@ export default class OpenDesktopLocationExtension extends Extension {
                         Main.overview.hide();
                     }
 
-                    const folder = Gio.File.new_for_path(desktopFilePath).get_parent();
-                    if (folder) {
-                        console.log(`Opening folder: ${folder.get_uri()}`);
-                        Gio.AppInfo.launch_default_for_uri(folder.get_uri(), null);
+                    const file = Gio.File.new_for_path(desktopFilePath);
+                    const fileManager = Gio.AppInfo.get_default_for_type('inode/directory', false);
+                    if (file && fileManager) {
+                        console.log(`Opening file location: ${file.get_uri()}`);
+                        fileManager.launch([file], null);
                     }
                 });
 
