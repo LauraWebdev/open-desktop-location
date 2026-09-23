@@ -3,14 +3,16 @@
   "description": "Opens the location of the applications .desktop file",
   "uuid": "open-desktop-location@laura.media",
   "url": "https://github.com/laurawebdev/open-desktop-location",
-  "version": 2,
-  "version-name": "1.0.1",
+  "version": 3,
+  "version-name": "1.0.2",
   "gettext-domain": "messages",
   "shell-version": [
     "45",
     "46",
     "47",
     "48",
-    "49"
+    "49",
+    "50",
+    "51"
   ]
 }
